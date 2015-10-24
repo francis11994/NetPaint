@@ -29,6 +29,10 @@ import javax.swing.JScrollPane;
 import model.PaintObject;
 
 public class NetPaintGUI extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static void main(String[] args) {
 		new NetPaintGUI().setVisible(true);
 	}
@@ -121,12 +125,6 @@ public class NetPaintGUI extends JFrame {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			System.out.print("afe");
-			PaintObject a=new model.Circle(new Point(400,200),Color.BLUE);
-			a.setfinalpoint(new Point(650,400));
-			list.add(a);
-			//canvas.repaint();
-			
 		}
 
 		@Override
@@ -156,6 +154,10 @@ public class NetPaintGUI extends JFrame {
 	}
 
 	private class DrawingPanel extends JPanel{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		public DrawingPanel(){
 			setBackground(Color.WHITE);
 			setLayout(null);
