@@ -2,6 +2,7 @@ package model;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Point;
 
 import javax.swing.JPanel;
@@ -12,10 +13,22 @@ public abstract class PaintObject{
 	private Point initial = new Point(0,0);
 	private Point lastPoint = new Point(0,0);
 	private Color color;
+	private boolean canpaint;
 	
 	public PaintObject(Point initial, Color color){
 		this.initial = initial;
 		this.color = color;
+		canpaint=false;
+	}
+	public void setcolor(Color a){
+		color=a;
+	}
+	public void setfinalpoint(Point a){
+		lastPoint=a;
+		canpaint=true;
+	}
+	public boolean canpaint(){
+		return canpaint;
 	}
 	public Point getInitial(){
 		return initial;
@@ -26,8 +39,5 @@ public abstract class PaintObject{
 	public Color getColor(){
 		return color;
 	}
-	public void setfinalpoint(Point a){
-		lastPoint=a;
-	}
-	public abstract void paint(Graphics g);
+	public abstract void paint(Graphics g); 
 }

@@ -2,6 +2,7 @@ package model;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Point;
 
 
@@ -23,5 +24,7 @@ public class Circle extends PaintObject{
 		int length=Math.abs((int) (fY-iY));
 		g.fillOval(Math.min(iX,fX ), Math.min(iY, fY), width, length);
 		}
+
+	
 	
 }
