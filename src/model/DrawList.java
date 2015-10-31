@@ -2,21 +2,22 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class DrawList implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3627563815191537172L;
-	private ArrayList<PaintObject> list;
+	private Vector<PaintObject> list;
 	public DrawList(){
-		list=new ArrayList<PaintObject>();
+		list=new Vector<PaintObject>();
 	}
 	public void add(PaintObject e){
 		list.add(e);
 	}
 	
-	public ArrayList<PaintObject> getlist(){
+	public Vector<PaintObject> getlist(){
 		return list;
 	}
 }

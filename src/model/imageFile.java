@@ -18,19 +18,13 @@ public class imageFile extends PaintObject implements Serializable{
 	}
 
 	@Override
-	public void paint(Graphics g) {
+	public void paint(Graphics g,Image b) {
 		g.setColor(getColor());
 		int iX=(int) getInitial().getX();
 		int iY=(int) getInitial().getY();
 		int fX=(int) getLastPoint().getX();
 		int fY=(int) getLastPoint().getY();	
-		Image dog=null;
-		try {
-			dog = ImageIO.read(new File("./picture/doge.jpeg"));
-		} catch (IOException e) {
-			
-		}
-		g.drawImage(dog, iX, iY, (int) (fX-iX), (int) ( fY-iY), null);
+		g.drawImage(b, iX, iY, (int) (fX-iX), (int) ( fY-iY), null);
 
 	}
 

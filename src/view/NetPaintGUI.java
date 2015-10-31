@@ -1,6 +1,7 @@
 package view;
 
-// 	incomplete Part ( close the clients)
+// Part 3 complete
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,20 +14,26 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Vector;
+
+import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-
+import java.awt.Image;
 import Network.Server;
 import model.DrawList;
 import model.PaintObject;
@@ -41,25 +48,32 @@ public class NetPaintGUI extends JFrame {
 	}
 	private JScrollPane panel=new JScrollPane();
 	private JPanel label=new JPanel();
-	private JRadioButton Line=new JRadioButton("Line"), Oval=new JRadioButton("Oval"), Rectangle=new JRadioButton("Rectangle"), Image=new JRadioButton("Image");
+	private JRadioButton Line=new JRadioButton("Line"), Oval=new JRadioButton("Oval"), Rectangle=new JRadioButton("Rectangle"), image=new JRadioButton("Image");
 	private JButton choosecolor=new JButton("Choose Color");
 	private ButtonGroup buttons=new ButtonGroup();
 	private boolean drawing;
 	private String selected=" ";
 	private JPanel canvas=new DrawingPanel();
 	private addlistener listener=new addlistener();
-	private DrawList list=new DrawList();
+	private DrawList list;
 	private PaintObject paint;
 	private Color color=Color.black;
 	private JColorChooser colorpanel=new JColorChooser(color);
+	private Image dog=null;
+	
 	public NetPaintGUI(){
+		setClient();
 		layoutTheJFrame();
 		addlistener();
-		setClient();
 	}
 
 	public void layoutTheJFrame(){
-		
+		try {
+			dog=ImageIO.read(new File("./picture/doge.jpeg"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//Jframe
 		setSize(760, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -71,20 +85,20 @@ public class NetPaintGUI extends JFrame {
 		label.setLayout(new FlowLayout());
 		label.add(choosecolor);
 		label.add(Line);
-		label.add(Image);
+		label.add(image);
 		label.add(Oval);
 		label.add(Rectangle);
 		buttons.add(Line);
 		buttons.add(Oval);
 		buttons.add(Rectangle);
-		buttons.add(Image);
+		buttons.add(image);
 		add(panel,BorderLayout.CENTER);
 		add(label,BorderLayout.SOUTH);
 	}
 	public void addlistener(){
 		Line.addActionListener(listener);
 		Oval.addActionListener(listener);
-		Image.addActionListener(listener);
+		image.addActionListener(listener);
 		Rectangle.addActionListener(listener);
 		panel.addMouseMotionListener(listener);
 		panel.addMouseListener(listener);
@@ -166,7 +180,6 @@ public class NetPaintGUI extends JFrame {
 		}
 		
 	}
-
 	public class colorlistener implements ActionListener{
 		private JFrame colorPanel;
 		public colorlistener(){
@@ -176,6 +189,7 @@ public class NetPaintGUI extends JFrame {
 			colorPanel.setTitle("Choose color");
 			colorPanel.add(colorpanel);
 		}
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			colorPanel.setVisible(true);	
@@ -195,37 +209,31 @@ public class NetPaintGUI extends JFrame {
 		public void paintComponent(Graphics g){
 			super.paintComponent(g);
 			Graphics2D g2=(Graphics2D) g;
-			ArrayList<PaintObject> printlist=list.getlist();
+			Vector<PaintObject> printlist=list.getlist();
 			for(PaintObject a:printlist)
-				a.paint(g2);
+				a.paint(g2,dog);
 			if(paint!=null)
 			if(paint.canpaint())
-			paint.paint(g2);
+			paint.paint(g2,dog);
 		}
 	}
 	private Socket socket;
 	ObjectOutputStream oos;
 	ObjectInputStream ois;
 	private void setClient(){
-
 			try {
 				socket=new Socket("localhost",Server.PORT_NUMBER);
 				oos=new ObjectOutputStream(socket.getOutputStream());
 				ois=new ObjectInputStream(socket.getInputStream());
-					list=(DrawList) ois.readObject();
-					repaint();
-			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				list=new DrawList();
+				list=(DrawList) ois.readObject();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				CleanUpAndQuit();
+				
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				CleanUpAndQuit();
 			}
 			
-		
 		ServerListener server=new ServerListener();
 			server.start();
 	
@@ -238,12 +246,29 @@ public class NetPaintGUI extends JFrame {
 				 PaintObject draw=(PaintObject) ois.readObject();
 				 list.add(draw);
 				repaint();
-			} catch (ClassNotFoundException e) {
+			}catch(NullPointerException e){
+				//CleanUpAndQuit();
+				return;
+			}
+			catch (ClassNotFoundException e) {
+				//CleanUpAndQuit();
+				return;
 			} catch (IOException e) {
-				
+				//CleanUpAndQuit();
+				return;
 				}
 		}
 	}
+	}
+	private void CleanUpAndQuit(){
+		if(socket!=null)
+			try {
+				socket.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		NetPaintGUI.this.dispatchEvent(new WindowEvent(NetPaintGUI.this, WindowEvent.WINDOW_CLOSING));
 	}
 		
 }

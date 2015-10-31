@@ -40,5 +40,5 @@ public abstract class PaintObject implements Serializable{
 	public Color getColor(){
 		return color;
 	}
-	public abstract void paint(Graphics g); 
+	public abstract void paint(Graphics g,Image b); 
 }

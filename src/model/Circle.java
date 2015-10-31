@@ -15,7 +15,7 @@ public class Circle extends PaintObject implements Serializable{
 	}
 
 	@Override
-	public void paint(Graphics g){
+	public void paint(Graphics g,Image b){
 		g.setColor(getColor());
 		int iX=(int) getInitial().getX();
 		int iY=(int) getInitial().getY();

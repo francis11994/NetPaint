@@ -7,13 +7,15 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import model.DrawList;
 import model.PaintObject;
 
 public class Server {
-	public static int PORT_NUMBER = 4009;
+	public static int PORT_NUMBER = 40102;
 	private static List<ObjectOutputStream> list = Collections.synchronizedList(new ArrayList<ObjectOutputStream>());
 	private static DrawList drawlist;
 
@@ -57,9 +59,11 @@ class ClientHandler extends Thread {
 				try {
 					draw = (PaintObject) fromclient.readObject();
 				} catch (ClassNotFoundException e) {
-				
+					//InputClose();
+					return;
 				} catch (IOException e) {
-	
+					//InputClose();
+					return;
 				}
 			drawlist.add(draw);
 			writetoclient(draw);
@@ -68,11 +72,24 @@ class ClientHandler extends Thread {
 
 	public void writetoclient(PaintObject draw) {
 		synchronized (list) {
+			
+			Set<ObjectOutputStream> close = new HashSet<ObjectOutputStream>();
 			for (ObjectOutputStream a : list)
 				try {
 					a.writeObject(draw);
 				} catch (IOException e) {
+					close.add(a);
 				}
+			list.removeAll(close);
+		}
+	}
+	
+	public void InputClose(){
+		try {
+			fromclient.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

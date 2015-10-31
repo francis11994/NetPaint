@@ -2,6 +2,7 @@ package model;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Point;
 import java.io.Serializable;
 
@@ -14,7 +15,7 @@ public class Rectangle extends PaintObject implements Serializable{
 	}
 
 	@Override
-	public void paint(Graphics g){
+	public void paint(Graphics g,Image b){
 		g.setColor(getColor());
 		int iX=(int) getInitial().getX();
 		int iY=(int) getInitial().getY();
