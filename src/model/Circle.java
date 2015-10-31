@@ -4,9 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.io.Serializable;
 
 
-public class Circle extends PaintObject{
+public class Circle extends PaintObject implements Serializable{
 
 	
 	public Circle(Point initial, Color color) {

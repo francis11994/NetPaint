@@ -14,6 +14,10 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -26,11 +30,12 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 
+import Network.Server;
 import model.Circle;
 import model.DrawList;
 import model.PaintObject;
 import model.imageFile;
-//Part 2 complete
+//Part3 working
 public class NetPaintGUI extends JFrame {
 	/**
 	 * 
@@ -55,6 +60,7 @@ public class NetPaintGUI extends JFrame {
 	public NetPaintGUI(){
 		layoutTheJFrame();
 		addlistener();
+		setClient();
 	}
 
 	public void layoutTheJFrame(){
@@ -132,8 +138,14 @@ public class NetPaintGUI extends JFrame {
 					paint=new model.imageFile(point, color);
 			}
 			else {
-				list.add(paint);
-				repaint();
+			//	list.add(paint);
+				//repaint();
+				try {
+					oos.writeObject(paint);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				drawing=false;
 			}
 		}
@@ -191,13 +203,53 @@ public class NetPaintGUI extends JFrame {
 		}
 		public void paintComponent(Graphics g){
 			super.paintComponent(g);
+			Graphics2D g2=(Graphics2D) g;
 			ArrayList<PaintObject> printlist=list.getlist();
 			for(PaintObject a:printlist)
-				a.paint(g);
+				a.paint(g2);
 			if(paint!=null)
 			if(paint.canpaint())
-			paint.paint(g);
+			paint.paint(g2);
 		}
 	}
+	private Socket socket;
+	ObjectOutputStream oos;
+	ObjectInputStream ois;
+	private void setClient(){
+		try {
+			socket=new Socket("localhost",Server.PORT_NUMBER);
+			oos=new ObjectOutputStream(socket.getOutputStream());
+			ois=new ObjectInputStream(socket.getInputStream());
+			
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ServerListener server=new ServerListener();
+			server.start();
+	}
+	private class ServerListener extends Thread{
+		@Override
+		public void run(){
+			while(true){
+			try {
+				 PaintObject draw=(PaintObject) ois.readObject();
+				 list.add(draw);
+				repaint();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+			
+		}
+	}
+	
 		
 }

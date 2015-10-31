@@ -4,10 +4,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.io.Serializable;
 
 import javax.swing.JPanel;
 
-public abstract class PaintObject{
+public abstract class PaintObject implements Serializable{
 
 	
 	private Point initial = new Point(0,0);

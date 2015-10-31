@@ -3,8 +3,9 @@ package model;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.Serializable;
 
-public class Rectangle extends PaintObject{
+public class Rectangle extends PaintObject implements Serializable{
 
 	
 	public Rectangle(Point initial, Color color) {

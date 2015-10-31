@@ -2,16 +2,22 @@ package model;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.imageio.ImageIO;
 
-public class imageFile extends PaintObject{
+public class imageFile extends PaintObject implements Serializable{
 
-	private BufferedImage dog=null;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4997884728112656379L;
+	private Image dog=null;
 	
 	public imageFile(Point initial, Color color) {
 		super(initial, color);
