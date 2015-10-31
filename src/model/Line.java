@@ -22,4 +22,9 @@ public class Line extends PaintObject implements Serializable{
 		int fY=(int) getLastPoint().getY();
 		g.drawLine(iX, iY,fX,fY);
 		}
+
+	@Override
+	public String shap() {
+		return "line";
+		}
 }

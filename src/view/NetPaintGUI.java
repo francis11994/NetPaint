@@ -1,4 +1,8 @@
 package view;
+/*
+ * incomplete				1.imageFile isn't serializable
+ * 							2 close the clients
+ */
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,31 +15,24 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 
 import Network.Server;
-import model.Circle;
 import model.DrawList;
 import model.PaintObject;
-import model.imageFile;
-//Part3 working
+
 public class NetPaintGUI extends JFrame {
 	/**
 	 * 
@@ -138,13 +135,9 @@ public class NetPaintGUI extends JFrame {
 					paint=new model.imageFile(point, color);
 			}
 			else {
-			//	list.add(paint);
-				//repaint();
 				try {
 					oos.writeObject(paint);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
 				}
 				drawing=false;
 			}
@@ -216,20 +209,28 @@ public class NetPaintGUI extends JFrame {
 	ObjectOutputStream oos;
 	ObjectInputStream ois;
 	private void setClient(){
-		try {
-			socket=new Socket("localhost",Server.PORT_NUMBER);
-			oos=new ObjectOutputStream(socket.getOutputStream());
-			ois=new ObjectInputStream(socket.getInputStream());
+
+			try {
+				socket=new Socket("localhost",Server.PORT_NUMBER);
+				oos=new ObjectOutputStream(socket.getOutputStream());
+				ois=new ObjectInputStream(socket.getInputStream());
+					list=(DrawList) ois.readObject();
+					repaint();
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		ServerListener server=new ServerListener();
 			server.start();
+	
 	}
 	private class ServerListener extends Thread{
 		@Override
@@ -240,16 +241,11 @@ public class NetPaintGUI extends JFrame {
 				 list.add(draw);
 				repaint();
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-			
+				
+				}
 		}
 	}
-	
+	}
 		
 }

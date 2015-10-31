@@ -24,4 +24,9 @@ public class Rectangle extends PaintObject implements Serializable{
 		int length=Math.abs((int) ( getLastPoint().getY()-iY));
 		g.fillRect(Math.min(iX,fX ), Math.min(iY, fY), width, length);	}
 
+	@Override
+	public String shap() {
+return "retangle";
+	}
+
 }
