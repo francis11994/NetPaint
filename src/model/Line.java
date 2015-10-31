@@ -23,8 +23,5 @@ public class Line extends PaintObject implements Serializable{
 		g.drawLine(iX, iY,fX,fY);
 		}
 
-	@Override
-	public String shap() {
-		return "line";
-		}
+	
 }

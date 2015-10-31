@@ -1,8 +1,6 @@
 package view;
-/*
- * incomplete				1.imageFile isn't serializable
- * 							2 close the clients
- */
+
+// 	incomplete Part ( close the clients)
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;

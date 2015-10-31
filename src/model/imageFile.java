@@ -11,15 +11,10 @@ import java.io.Serializable;
 import javax.imageio.ImageIO;
 
 public class imageFile extends PaintObject implements Serializable{
-	private Image dog=null;
 	
 	public imageFile(Point initial, Color color) {
 		super(initial, color);
-		try{
-				dog = ImageIO.read(new File("./picture/doge.jpeg"));
-		}catch(IOException e){
-			e.printStackTrace();
-		}
+			
 	}
 
 	@Override
@@ -28,14 +23,16 @@ public class imageFile extends PaintObject implements Serializable{
 		int iX=(int) getInitial().getX();
 		int iY=(int) getInitial().getY();
 		int fX=(int) getLastPoint().getX();
-		int fY=(int) getLastPoint().getY();
+		int fY=(int) getLastPoint().getY();	
+		Image dog=null;
+		try {
+			dog = ImageIO.read(new File("./picture/doge.jpeg"));
+		} catch (IOException e) {
+			
+		}
 		g.drawImage(dog, iX, iY, (int) (fX-iX), (int) ( fY-iY), null);
 
 	}
 
-	@Override
-	public String shap() {
-		return "image";
-	}
 
 }

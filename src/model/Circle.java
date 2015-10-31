@@ -26,10 +26,7 @@ public class Circle extends PaintObject implements Serializable{
 		g.fillOval(Math.min(iX,fX ), Math.min(iY, fY), width, length);
 		}
 
-	@Override
-	public String shap() {
-		return "Circle";
-	}
+	
 
 	
 	
