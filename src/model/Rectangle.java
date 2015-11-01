@@ -9,6 +9,11 @@ import java.io.Serializable;
 public class Rectangle extends PaintObject implements Serializable{
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public Rectangle(Point initial, Color color) {
 		super(initial,color);
 		

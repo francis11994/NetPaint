@@ -6,11 +6,13 @@ import java.awt.Image;
 import java.awt.Point;
 import java.io.Serializable;
 
-import javax.swing.JPanel;
-
 public abstract class PaintObject implements Serializable{
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Point initial = new Point(0,0);
 	private Point lastPoint = new Point(0,0);
 	private Color color;

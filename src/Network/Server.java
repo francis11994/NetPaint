@@ -22,6 +22,7 @@ public class Server {
 	public static void main(String[] args) throws IOException {
 		drawlist = new DrawList();
 		Socket client = null;
+		@SuppressWarnings("resource")
 		ServerSocket socket = new ServerSocket(PORT_NUMBER);
 		ObjectInputStream fromClient = null;
 		ObjectOutputStream toClient = null;
@@ -56,15 +57,15 @@ class ClientHandler extends Thread {
 	public void run() {
 		while (true) {
 			PaintObject draw = null;
-				try {
-					draw = (PaintObject) fromclient.readObject();
-				} catch (ClassNotFoundException e) {
-					//InputClose();
-					return;
-				} catch (IOException e) {
-					//InputClose();
-					return;
-				}
+			try {
+				draw = (PaintObject) fromclient.readObject();
+			} catch (ClassNotFoundException e) {
+				// InputClose();
+				return;
+			} catch (IOException e) {
+				// InputClose();
+				return;
+			}
 			drawlist.add(draw);
 			writetoclient(draw);
 		}
@@ -72,7 +73,7 @@ class ClientHandler extends Thread {
 
 	public void writetoclient(PaintObject draw) {
 		synchronized (list) {
-			
+
 			Set<ObjectOutputStream> close = new HashSet<ObjectOutputStream>();
 			for (ObjectOutputStream a : list)
 				try {
@@ -83,13 +84,11 @@ class ClientHandler extends Thread {
 			list.removeAll(close);
 		}
 	}
-	
-	public void InputClose(){
+
+	public void InputClose() {
 		try {
 			fromclient.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 }
